@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Signup</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body>
+<div class="inner-wrapper">
+
+    <div class="insertForm">
+        <div class="top">
+            <a href="/">
+                <button class="back-btn">
+                    Back to Home
+                </button>
+            </a>
+        </div>
+        <h2 style="text-align: center">Signup</h2>
+        <form th:method="POST" th:action="@{/auth/signup}" th:object="${userSignup}">
+            <div class="input-container">
+                <div class="fullname">
+                    <label for="fullname">Fullname</label>
+                    <input
+                            type="text"
+                            id="fullname"
+                            th:field="*{fullname}"
+                            placeholder="Eg. John Doe"
+                            required
+                    />
+                </div>
+
+                <div class="email">
+                    <label for="email">Email</label>
+                    <input
+                            type="email"
+                            id="email"
+                            th:field="*{email}"
+                            placeholder="Eg. John@example.com"
+                            required
+                    />
+                    <span th:if="${duplicateRecord}" th:text="${duplicateRecord}"></span>
+                </div>
+
+                <div class="">
+                    <label for="password">Password</label>
+                    <input type="password"
+                           id="password"
+                           th:field="*{password}"
+                           placeholder="********"
+                           required
+                    />
+                </div>
+
+                <div class="confirm-password">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password"
+                           id="confirm-password"
+                           th:field="*{confirmPassword}"
+                           placeholder="********"
+                           required
+                    />
+                    <span th:if="${passwordDoNotMatch}" th:text="${passwordDoNotMatch}"></span>
+                </div>
+
+            </div>
+            <div class="signup-btn" style="text-align: center">
+                <input type="submit" name="save" value="Sign Up"/>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

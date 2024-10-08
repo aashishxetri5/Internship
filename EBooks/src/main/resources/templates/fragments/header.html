@@ -1,0 +1,27 @@
+<div class="menuwrapper" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <ul class="menu">
+        <li class="linkitem">
+            <a th:href="@{/}">Home</a>
+        </li>
+        <li class="linkitem">
+            <a th:href="@{/books}">Books</a>
+        </li>
+    </ul>
+
+    <ul class="menu">
+        <li class="linkitem" sec:authorize="isAnonymous()" >
+            <a th:href="@{/auth/login}">Login</a>
+        </li>
+        <li class="linkitem" sec:authorize="isAnonymous()" >
+            <a th:href="@{/auth/signup}">Signup</a>
+        </li>
+        <li class="linkitem" sec:authorize="isAuthenticated()" >
+            <a th:href="@{/dashboard/home}">Dashboard</a>
+        </li>
+        <li class="linkitem" sec:authorize="isAuthenticated()" >
+            <a th:href="@{/logout}">Logout</a>
+        </li>
+    </ul>
+</div>
+
+<!--<p style="margin-top: 20px; color: #333333; margin-bottom: 10px; text-align: center;" th:text="${message}"></p>-->

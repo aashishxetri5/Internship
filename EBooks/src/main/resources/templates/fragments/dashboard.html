@@ -1,0 +1,75 @@
+<header class="dashboard-h">
+    <div class="container-db-top">
+        <div class="left-nav-dashboard">
+            <div id="title">
+                <a href="/">
+                    <h3>E-Books</h3>
+                </a>
+            </div>
+        </div>
+
+        <div class="right-nav-dashboard">
+            <div class="profile-icon">
+                <a href="/logout">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section id="dashboard-section" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <div class="sidebar-container">
+        <div class="profile-container">
+            <img src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/corporate-user-icon.png"
+                 alt="profile"
+                 class="profile-img-dshb"/>
+        </div>
+        <!-- Sidebar Navigation Menu -->
+        <nav class="sidebar-nav">
+            <ul>
+
+                <li class="db-icon" title="Dashboard">
+                    <a href="/dashboard/home">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="db-icon" title="Profile">
+                    <a href="/dashboard/profile">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+
+                <li class="db-icon" title="Users" sec:authorize="hasRole('ADMIN')">
+                    <a href="/dashboard/users">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+
+<!--                <li class="db-icon" title="Genres">-->
+<!--                    <a href="/dashboard/genres">-->
+<!--                        <i class="fas fa-clipboard-list"></i>-->
+<!--                        <span>Genres</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+
+                <li class="db-icon" title="E-Books" sec:authorize="hasRole('ADMIN')">
+                    <a href="/dashboard/ebooks">
+                        <i class="fas fa-book"></i>
+                        <span>E-Books</span>
+                    </a>
+                </li>
+
+                <li class="db-icon" title="Change Password">
+                    <a href="/dashboard/changePassword">
+                        <i class="fas fa-key"></i>
+                        <span>Change Password</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>

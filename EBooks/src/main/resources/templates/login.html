@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+</head>
+<body>
+<section class="lw">
+    <div class="inner-wrapper">
+
+        <div class="top">
+            <a href="/">
+                <button class="back-btn">
+                    Back to Home
+                </button>
+            </a>
+
+            <p style="color: darkred" th:if="${error}" th:text="${error}"></p>
+        </div>
+
+        <!-- Login Form Section -->
+        <div class="form">
+            <h1>Login</h1>
+            <form id="login-f" th:action="@{/auth/login}" method="POST" th:object="${userLogin}">
+                <label for="email">Email</label>
+                <input class="lp-inp"
+                       id="email"
+                       th:field="*{email}"
+                       required=""
+                       type="email"/>
+                <span style="color: darkred;" th:if="${emptyEmail}" th:text="${emptyEmail}"></span>
+
+                <label for="password">Password</label>
+                <input class="lp-inp"
+                       id="password"
+                       th:field="*{password}"
+                       required=""
+                       type="password"/>
+                <span th:if="${emptyPassword}" th:text="${emptyPassword}"></span>
+
+
+                <input type="submit" class="login-btn" value="Login">
+            </form>
+
+            <span th:if="${loginFailed}" th:text="${loginFailed}"></span>
+
+            <!-- Password Reset Section -->
+            <div class="pwd-reset">
+                <a href="#" class="forgot-pwd">
+                    Forgot Password?
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
