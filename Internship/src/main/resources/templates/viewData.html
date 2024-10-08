@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>View Data</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/header}"></div>
+
+<table class="styled-table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Roll</th>
+        <th>Full name</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Course</th>
+        <th>Semester</th>
+        <th>DOB</th>
+        <th>Age</th>
+        <th colspan="2">Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="student, stat: ${students}">
+        <td th:text="${stat.count}"></td>
+        <td th:text="${student.getRoll()}"></td>
+        <td th:text="${student.getFullName()}"></td>
+        <td th:text="${student.getEmail()}"></td>
+        <td th:text="${student.getPhoneNumber()}"></td>
+        <td th:text="${student.getCourse()}"></td>
+        <td th:text="${student.getSemester()}"></td>
+        <td th:text="${student.getDob()}"></td>
+        <td th:text="${student.getAge()}"></td>
+        <td>
+            <a th:href="@{/update/{roll}(roll=${student.getId()})}">Edit</a>
+        </td>
+        <td>
+            <a th:href="@{/delete/{roll}(roll=${student.getId()})}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+</head>
+<body>
+<section class="lw">
+    <div class="inner-wrapper">
+
+        <div class="top">
+            <p style="color: darkred" th:if="${error}" th:text="${error}"></p>
+        </div>
+
+        <!-- Login Form Section -->
+        <div class="form">
+            <h1>Login</h1>
+            <form id="login-f" method="POST" th:action="@{/user/login}" th:object="${credentials}">
+                <label for="username">Username</label>
+                <input class="lp-inp"
+                       id="username"
+                       required=""
+                       th:field="*{username}"
+                       type="text"/>
+
+                <label for="password">Password</label>
+                <input class="lp-inp"
+                       id="password"
+                       required=""
+                       th:field="*{password}"
+                       type="password"/>
+
+                <input type="submit" class="login-btn" value="Login">
+            </form>
+
+            <!-- Password Reset Section -->
+            <div class="pwd-reset">
+                <a href="#" class="forgot-pwd">
+                    <i class="fa-solid fa-unlock-keyhole"></i> Forgot Password?
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

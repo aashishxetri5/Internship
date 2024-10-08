@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title th:text="${title}"></title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body>
+<div th:replace="~{fragments/header}"></div>
+<!--Registration Form-->
+<div class="insertForm">
+    <form action="#" th:action="@{/saveData}" method="POST" th:object="${student}">
+        <div class="input-container">
+            <div class="studentId">
+                <label for="studentId">Student ID</label>
+                <input
+                        type="text"
+                        th:field="*{roll}"
+                        id="studentId"
+                        placeholder="Eg. 211812"
+                        required
+                />
+            </div>
+
+            <div class="fullname">
+                <label for="fullname">Fullname</label>
+                <input
+                        type="text"
+                        th:field="*{user.fullname}"
+                        id="fullname"
+                        placeholder="Eg. John Doe"
+                        required
+                />
+            </div>
+
+            <div class="phoneNum">
+                <label for="phoneNum">Phone Number</label>
+                <input type="text"
+                       th:field="*{user.phoneNumber}"
+                       id="phoneNum"
+                       placeholder="Eg. 9841xxxxxx"
+                       required
+                />
+            </div>
+
+            <div class="email">
+                <label for="email">Email</label>
+                <input
+                        type="text"
+                        th:field="*{user.email}"
+                        id="email"
+                        placeholder="Eg. John@example.com"
+                        required
+                />
+            </div>
+
+            <div class="course">
+                <label for="course">Course</label>
+                <select th:field="*{course}" id="course" required>
+                    <option value="" disabled selected hidden>Select Course</option>
+
+                    <option th:each="course : ${courses}" th:value="${course}" th:text="${course}"></option>
+
+                </select>
+            </div>
+
+            <div class="semester">
+                <label for="semester">Semester</label>
+                <select th:field="*{semester}" id="semester" required>
+                    <option value="0" disabled selected hidden>
+                        Select Semester
+                    </option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </div>
+
+            <div class="dob">
+                <label for="dob">Date of Birth</label>
+                <input
+                        type="date"
+                        th:field="*{dob}"
+                        id="dob"
+                        required
+                />
+            </div>
+
+        </div>
+        <div class="save-btn">
+            <input type="submit" name="save" value="Save"/>
+        </div>
+    </form>
+</div>
+
+
+<!--View Table-->
+<div class="viewTable">
+
+</div>
+</body>
+</html>
