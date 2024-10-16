@@ -1,6 +1,7 @@
 package amnil.ebooks.service.book;
 
 import amnil.ebooks.dto.request.BookRequest;
+import amnil.ebooks.dto.response.BookEditDTO;
 import amnil.ebooks.dto.response.BookResponseDTO;
 import amnil.ebooks.exception.NoSuchRecordException;
 import amnil.ebooks.exception.OperationFailureException;
@@ -10,7 +11,6 @@ import amnil.ebooks.repository.BookRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -29,10 +29,9 @@ import java.util.List;
 public class BookService implements IBookService {
 
     private final BookRepository bookRepository;
-    private final ConversionService conversionService;
 
     @Override
-    public Book addBook(BookRequest request, MultipartFile bookFile) {
+    public void addBook(BookRequest request, MultipartFile bookFile) {
         String baseDir = System.getProperty("user.dir");
         String dirPath = baseDir + File.separator + "uploads" + File.separator + "file";
         String path = dirPath + File.separator + bookFile.getOriginalFilename();
@@ -47,17 +46,14 @@ public class BookService implements IBookService {
         }
 
         try {
-            System.out.println(path);
             bookFile.transferTo(new File(path));
-            return bookRepository.save(createBook(request, path));
+            bookRepository.save(createBook(request, path));
         } catch (IOException e) {
-            e.printStackTrace();
             throw new OperationFailureException("Failed to save file");
         }
     }
 
     private Book createBook(BookRequest request, String path) {
-        System.out.println("Path " + path );
         return new Book(
                 request.getTitle(),
                 request.getDescription(),
@@ -93,14 +89,14 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Book updateBook(BookRequest request, Long bookId) {
-        return bookRepository.findById(bookId)
-                .map(existingBook -> updateExistingBook(existingBook, request))
+    public void updateBook(BookEditDTO book) {
+        bookRepository.findById(book.getId())
+                .map(existingBook -> updateExistingBook(existingBook, book))
                 .map(bookRepository::save)
                 .orElseThrow(() -> new OperationFailureException("Failed to update book"));
     }
 
-    private Book updateExistingBook(Book existingBook, BookRequest newBookData) {
+    private Book updateExistingBook(Book existingBook, BookEditDTO newBookData) {
         existingBook.setTitle(newBookData.getTitle());
         existingBook.setDescription(newBookData.getDescription());
         existingBook.setAuthor(newBookData.getAuthor());
@@ -141,7 +137,6 @@ public class BookService implements IBookService {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("FAILED TO DOWNLOAD FILES");
             throw new OperationFailureException("Failed to download file");
         }

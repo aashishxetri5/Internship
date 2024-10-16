@@ -1,8 +1,10 @@
 package amnil.ebooks.model;
 
+import amnil.ebooks.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,6 +13,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString
 public class CustomUserDetails implements UserDetails {
 
     private Long userId;
@@ -18,6 +21,7 @@ public class CustomUserDetails implements UserDetails {
     private String address;
     private String email;
     private String password;
+    private Role role;
     private Collection<? extends GrantedAuthority> authorities;
 
     @Override

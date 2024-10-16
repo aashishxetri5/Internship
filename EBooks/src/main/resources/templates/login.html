@@ -32,7 +32,7 @@
                        th:field="*{email}"
                        required=""
                        type="email"/>
-                <span style="color: darkred;" th:if="${emptyEmail}" th:text="${emptyEmail}"></span>
+                <span style="color: darkred;" th:if="${emailError}" th:text="${emailError}"></span>
 
                 <label for="password">Password</label>
                 <input class="lp-inp"
@@ -40,7 +40,7 @@
                        th:field="*{password}"
                        required=""
                        type="password"/>
-                <span th:if="${emptyPassword}" th:text="${emptyPassword}"></span>
+                <span style="color: darkred;" th:if="${passwordError}" th:text="${passwordError}"></span>
 
 
                 <input type="submit" class="login-btn" value="Login">

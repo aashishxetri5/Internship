@@ -1,7 +1,7 @@
 package amnil.ebooks.controller;
 
 import amnil.ebooks.dto.request.BookRequest;
-import amnil.ebooks.dto.response.BookResponseDTO;
+import amnil.ebooks.dto.response.BookEditDTO;
 import amnil.ebooks.model.Book;
 import amnil.ebooks.service.book.BookService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,23 +14,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-
 @Controller
+@RequestMapping("/book")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BookController {
 
     private final BookService bookService;
 
-    @GetMapping("/books")
-    public String books(Model model) {
-        List<BookResponseDTO> allBooks = bookService.getAllBooks();
-        model.addAttribute("books", allBooks);
-        return "books";
-    }
-
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/upload/book")
+    @PostMapping("/upload")
     public String uploadBook(RedirectAttributes redirectAttributes, @ModelAttribute("ebook") BookRequest request, @RequestParam MultipartFile bookFile) {
 
         if (bookFile.isEmpty()) {
@@ -39,7 +31,7 @@ public class BookController {
         }
 
         try {
-            Book book = bookService.addBook(request, bookFile);
+            bookService.addBook(request, bookFile);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
@@ -48,7 +40,7 @@ public class BookController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/book/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             bookService.deleteBookById(id);
@@ -59,12 +51,39 @@ public class BookController {
         return "redirect:/dashboard/ebooks";
     }
 
-    @GetMapping("/book/download/{id}")
+    @GetMapping("/download/{id}")
     public void downloadBook(@PathVariable Long id, HttpServletResponse res, RedirectAttributes redirectAttributes) {
         try {
             bookService.downloadBook(id, res);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("bookError", e.getMessage());
         }
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editBook(@PathVariable Long id, Model model) {
+        Book book = bookService.getBookById(id);
+
+        BookEditDTO bookResponse = new BookEditDTO(
+                book.getId(),
+                book.getTitle(),
+                book.getDescription(),
+                book.getAuthor(),
+                book.getPublisher()
+        );
+
+        model.addAttribute("ebook", bookResponse);
+
+        return "dashboardEditBooks";
+    }
+
+    @PostMapping("/edit")
+    public String saveEditedBookDetails(@ModelAttribute("ebook") BookEditDTO bookEditDTO, RedirectAttributes redirectAttributes) {
+        try {
+            bookService.updateBook(bookEditDTO);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/dashboard/ebooks";
     }
 }

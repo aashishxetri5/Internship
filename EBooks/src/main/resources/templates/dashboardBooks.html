@@ -71,7 +71,7 @@
                         <h1 class="modal-title fs-5" id="newEbookModalLabel">New Admin</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form th:action="@{/upload/book}" method="POST" th:object="${ebook}" enctype="multipart/form-data">
+                    <form th:action="@{/book/upload}" method="POST" th:object="${ebook}" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div class="input-container">
 
@@ -121,7 +121,7 @@
                                 </div>
 
                                 <div class="book">
-                                    <label for="book">Publisher</label>
+                                    <label for="book">Book</label>
                                     <input
                                             type="file"
                                             name="bookFile"
@@ -139,7 +139,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
                             </button>
-                            <button type="submit" class="btn btn-primary">Save User</button>
+                            <button type="submit" class="btn btn-primary">Upload Book</button>
                         </div>
                     </form>
                 </div>
@@ -164,7 +164,8 @@
             <th scope="row" th:text="${status.index+1}"></th>
             <td>
                 <div style="height: 50px; width: 50px">
-                    <img th:src="${book.getThumbnailPath()}" alt="" style="height: 100%; width: 100%; object-fit: cover;">
+                    <img th:src="${book.getThumbnailPath()}" alt=""
+                         style="height: 100%; width: 100%; object-fit: cover;">
                 </div>
             </td>
             <td th:text="${book.getTitle() }"></td>

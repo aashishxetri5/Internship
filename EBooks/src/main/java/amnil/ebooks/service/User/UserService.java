@@ -46,7 +46,6 @@ public class UserService implements IUserService {
 
     @Override
     public ValidUserResponse getUserByEmail(String email) {
-        System.out.println(userRepository.findUserByEmail(email));
         return userRepository.findUserByEmail(email);
     }
 
@@ -82,7 +81,7 @@ public class UserService implements IUserService {
     public void updateUserPassword(Long userId, ChangePasswordDTO password) {
         userRepository.findById(userId).ifPresentOrElse(
                 user -> {
-                    if(!passwordEncoder.matches(password.getOldPassword(), user.getPassword())) {
+                    if (!passwordEncoder.matches(password.getOldPassword(), user.getPassword())) {
                         throw new OperationFailureException("Old password does not match");
                     }
                     user.setPassword(passwordEncoder.encode(password.getNewPassword()));
