@@ -6,9 +6,9 @@ import amnil.tm.dto.response.TaskResponse;
 import amnil.tm.enums.TaskStatus;
 import amnil.tm.model.Task;
 import amnil.tm.service.task.ITaskService;
-import amnil.tm.service.task.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,11 +25,11 @@ public class TaskController {
     private final ITaskService taskService;
 
     @Autowired
-    public TaskController(TaskService taskService) {
+    public TaskController(ITaskService taskService) {
         this.taskService = taskService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponse> tasks() {
         try {
@@ -41,6 +41,7 @@ public class TaskController {
             }
 
             return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .body(new ApiResponse("Tasks Fetched Successfully", allTasks));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -48,7 +49,7 @@ public class TaskController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/new")
     public ResponseEntity<ApiResponse> newTask(@RequestBody TaskRequest request) {
         try {
@@ -94,7 +95,7 @@ public class TaskController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{taskId}")
     public ResponseEntity<ApiResponse> deleteTask(@PathVariable Long taskId) {
         try {
@@ -105,7 +106,7 @@ public class TaskController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/assign/{taskId}/{userId}")
     public ResponseEntity<ApiResponse> assignTask(@PathVariable Long taskId, @PathVariable Long userId) {
         try {
@@ -133,6 +134,7 @@ public class TaskController {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update")
     public ResponseEntity<ApiResponse> updateTask(@RequestBody TaskRequest request) {
         try {

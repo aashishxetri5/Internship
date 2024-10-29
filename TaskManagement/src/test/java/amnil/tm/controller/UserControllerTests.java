@@ -4,7 +4,7 @@ package amnil.tm.controller;
 import amnil.tm.dto.response.UserResponse;
 import amnil.tm.enums.Role;
 import amnil.tm.service.UserDetailsServiceImpl;
-import amnil.tm.service.user.UserService;
+import amnil.tm.service.user.IUserService;
 import amnil.tm.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,11 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(UserController.class)
 public class UserControllerTests {
 
-
     private final MockMvc mockMvc;
 
     @MockBean
-    private UserService userService;
+    private IUserService userService;
 
     @MockBean
     private UserDetailsServiceImpl userDetailsService;
@@ -38,7 +37,7 @@ public class UserControllerTests {
     @MockBean
     private JwtUtil jwtUtil;
 
-    @InjectMocks
+    @Autowired
     private UserController userController;
 
     private String token;
@@ -50,11 +49,11 @@ public class UserControllerTests {
 
     @BeforeEach
     public void setUp() {
-        token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha0BnbWFpbC5jb20iLCJpYXQiOjE3Mjk4NTI4NDksImV4cCI6MTcyOTg1NjQ0OX0.x4KI-NwM8NLHBOcti_penOIJyFjGYYBq_qYIPqJX1fA";
+        token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwic3ViIjoiYWtAZ21haWwuY29tIiwiaWF0IjoxNzMwMTk4MzQxLCJleHAiOjE3MzAyMDE5NDF9.-Oq6UjXj-RNxDL_7Att0-7DnBSVa3xWeYBvTd22ImAY";
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     void testGetUserWithContent() throws Exception {
         List<UserResponse> userList = new ArrayList<>();
         userList.add(new UserResponse(1L, "Aashish Katwal", "ak@gmail.com", List.of(Role.ADMIN, Role.USER)));
@@ -62,7 +61,8 @@ public class UserControllerTests {
 
         Mockito.when(userService.getUsers()).thenReturn(userList);
 
-        mockMvc.perform(get("/api/users").header("Authorization", token))
+        mockMvc.perform(get("/api/users")
+                        .header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(result -> System.out.println(result.getResponse().getContentAsString()))

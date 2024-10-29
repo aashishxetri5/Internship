@@ -15,11 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.crossstore.ChangeSetPersister;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,10 +38,7 @@ public class TaskServiceTests {
 
     @Test
     public void testSaveTask_success() {
-        TaskRequest taskRequest = new TaskRequest();
-        taskRequest.setTitle("Do laundry");
-        taskRequest.setDescription("Wash all your dirty clothes");
-        taskRequest.setStatus(TaskStatus.PENDING);
+        TaskRequest taskRequest = new TaskRequest("Do laundry", "Wash all your dirty clothes", TaskStatus.PENDING);
 
         Task mockTask = new Task();
         mockTask.setId(1L);
@@ -108,8 +105,7 @@ public class TaskServiceTests {
     public void testGetTaskById_success() {
         Task task = new Task(1L, "Some Task", "Task Desc", TaskStatus.PENDING, null, null);
 
-        Mockito.when(taskService.getTaskById(Mockito.anyLong())).thenReturn(task);
-
+        Mockito.when(taskRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(task));
         Task response = taskService.getTaskById(1L);
 
         Assertions.assertNotNull(response);
@@ -120,7 +116,7 @@ public class TaskServiceTests {
     }
 
     @Test
-    public void testGetTaskById_NotFound(){
+    public void testGetTaskById_NotFound() {
         Assertions.assertThrows(NoSuchElementException.class, () -> {
             taskService.getTaskById(100L);
         });

@@ -5,6 +5,7 @@ import amnil.tm.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -21,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
@@ -39,6 +40,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/", "/api/auth/login", "/api/auth/signup").permitAll()
+                        .requestMatchers("/api/tasks/new", "/api/tasks/assign/", "/api/tasks/update").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/tasks").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/tasks/{taskId}").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
